@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leaflet Web Map 2</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+    />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script src="klaten.js"></script>
+
+    <!--PENGATURAN TAMPILAN PETA-->
+    <style>
+       #map {
+        width: 100%;
+        height: 630px;
+        margin-top: 10px;
+      }
+      .container-fluid {
+        padding: 0 15px;
+      }
+		    html
+		    {
+		    scroll-behavior: smooth;
+		    }
+        .leaflet-popup-content {
+            text-align: justify;
+        }
+        .leaflet-popup-content img {
+            width: 70%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">SIGWeb</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Home</a
+              >
+            </li>
+          </ul>
+
+          <form class="d-flex">
+            <button
+              class="btn btn-outline-success"
+              type="button"
+              onclick="cari()"
+            >
+              Lokasi saya
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!--Kontainer Peta-->
+    <div class="container-fluid">
+      <div id="map"></div>
+    </div>
+
+    <!--Peta-->
+    <script>
+            var map = L.map('map',{
+            center: [-7.6741, 110.6289],
+            zoom: 11
+            });
+
+            var esri = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS UserCommunity',
+            }).addTo(map);
+
+            var carto = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}{r}.png",{
+                attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                subdomains: "abcd",
+                maxZoom: 19,
+            });
+
+            var USGS_USImagery = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}', {
+	              maxZoom: 20,
+	              attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
+            });
+
+            var OSM = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            });
+
+            var osmHOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France'
+            });
+
+          var baseMaps = {
+            "Citra Satelit": esri,
+            "Peta Carto": carto,
+            "USGS": USGS_USImagery,
+            "OSM": OSM,
+            "OSM2": osmHOT
+          };
+
+          var bayat = L.marker([-7.783794258224987, 110.63649829830833]).bindPopup('Bayat'),
+              cawas = L.marker([-7.756315832999151, 110.69504090689831]).bindPopup('Cawas'),
+              ceper = L.marker([-7.67292979873169, 110.68850600891956]).bindPopup('Ceper'),
+              delanggu = L.marker([-7.6167512826679165, 110.69747546857863]).bindPopup('Delanggu'),
+              gantiwarno = L.marker([-7.762978862673597, 110.56435626310578]).bindPopup('Gantiwarno'),
+              jatinom = L.marker([-7.62582878587584, 110.59520210392719]).bindPopup('Jatinom'),
+              jogonalan = L.marker([-7.726335526610611, 110.54677417700093]).bindPopup('Jogonalan'),
+              juwiring = L.marker([-7.654675680658225, 110.72337375081479]).bindPopup('Juwiring'),
+              kalikotes = L.marker([-7.699029863920056, 110.63564398000122]).bindPopup('Kalikotes'),
+              karanganom = L.marker([-7.643617257823941, 110.63366053311064]).bindPopup('Karanganom'),
+              karangdowo = L.marker([-7.70386145692022, 110.73538415895675]).bindPopup('Karangdowo'),
+              karangnongko = L.marker([-7.667814578417762, 110.56884472067324]).bindPopup('Karangnongko'),
+              kebonarum = L.marker([-7.701706743251363, 110.56060654107844]).bindPopup('Kebonarum'),
+              kemalang = L.marker([-7.654921663542292, 110.52026739607415]).bindPopup('Kemalang'),
+              klatenselatan = L.marker([-7.713455634074365, 110.58380004487117]).bindPopup('Klaten selatan'),
+              klatentengah= L.marker([-7.710037877280017, 110.6094593583597]).bindPopup('Klaten tengah'),
+              klatenutara  = L.marker([-7.689508412331008, 110.61205402238488]).bindPopup('Klaten utara'),
+              manisrenggo = L.marker([-7.69056820292262, 110.48762101025251]).bindPopup('Manisrenggo'),
+              ngawen = L.marker([-7.6611324086964085, 110.59303257706908]).bindPopup('Ngawen'),
+              pedan = L.marker([-7.693632890521511, 110.70512852935373]).bindPopup('Pedan'),
+              polanharjo = L.marker([-7.6034292278887605, 110.66600050124715]).bindPopup('Polanharjo'),
+              prambanan = L.marker([-7.743779, 110.510315]).bindPopup('Prambanan'),
+              trucuk = L.marker([-7.719067727928045, 110.66677385219366]).bindPopup('Trucuk'),
+              tulung = L.marker([-7.583200876656586, 110.62013499425717]).bindPopup('Tulung'),
+              wedi = L.marker([-7.742342859694046, 110.58021111619561]).bindPopup('Wedi'),
+              wonosari = L.marker([-7.624156447146682, 110.74601889058324]).bindPopup('Wonosari');
+
+          var klaten = L.layerGroup([bayat, cawas, ceper, delanggu, gantiwarno, jatinom, jogonalan, juwiring, kalikotes, karanganom,
+                                      karangdowo, karangnongko, kebonarum, kemalang, klatenselatan, klatentengah, klatenutara,
+                                      manisrenggo, ngawen, pedan, polanharjo, prambanan, trucuk, tulung, wedi, wonosari]);
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { 
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' 
+        }).addTo(map); 
+
+    var wisataIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png', // Paling cocok untuk wisata
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize:     [25, 41],
+        iconAnchor:   [12, 41],
+        popupAnchor:  [1, -34],
+        shadowSize:   [41, 41]
+    });
+
+      // Umbul Ponggok
+      var UmbulPonggok = L.marker([-7.613798, 110.635864], { icon: wisataIcon })
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Umbul Ponggok</h3>
+                    <img src="https://liburanyuk.co.id/wp-content/uploads/2021/01/131249701_398511794726504_9107937725424463849_n.jpg" 
+                      alt="Umbul Ponggok" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Kolam mata air alami di Desa Ponggok, Klaten, yang terkenal dengan pengalaman snorkeling dan foto bawah air menggunakan berbagai properti unik seperti sepeda, kursi, hingga motor. Airnya jernih dan penuh ikan hias, menjadikannya destinasi wisata favorit keluarga dan wisatawan muda. 
+                    </p>
+                    </div>`);
+        
+      // Deles Indah
+      var DelesIndah = L.marker([-7.569789, 110.466909], { icon: wisataIcon }) 
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Deles Indah</h3>
+                    <img src="https://asset-2.tstatic.net/jogja/foto/bank/images/Wisata-Deles-Indah.jpg" 
+                      alt="Deles Indah" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Salah satu destinasi wisata alam di Kabupaten Klaten, Jawa Tengah, yang menawarkan pemandangan indah di lereng Gunung Merapi. Lokasinya berada di Kecamatan Kemalang, sekitar 25 km dari pusat Kota Klaten. Obyek wisata ini menjadi tempat favorit bagi wisatawan yang mencari ketenangan dan udara segar di ketinggian.                    
+                    </p>
+                    </div>`);
+
+      // Gondola Girpasang
+      var GondolaGirpasang = L.marker([-7.570385, 110.479008], { icon: wisataIcon }) 
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Gondola Girpasang</h3>
+                    <img src="https://i.ytimg.com/vi/TW_ylGod65w/maxresdefault.jpg" 
+                      alt="Gondola Girpasang" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Terletak di lereng Gunung Merapi, Gondola Girpasang menawarkan pengalaman unik menyeberangi jurang sedalam 150 meter dengan menggunakan gondola tradisional yang menghubungkan Dusun Girpasang dengan desa sekitarnya. Dikelilingi pemandangan alam yang spektakuler dan udara sejuk pegunungan, wisata ini cocok untuk pencinta petualangan dan fotografi alam. Tersedia juga jembatan gantung sepanjang 120 meter, kafe, dan area santai.                   
+                    </p>
+                    </div>`);
+
+      // Bukit Sidoguro
+      var BukitSidoguro = L.marker([-7.750700, 110.621002], { icon: wisataIcon })
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Bukit Sidoguro</h3>
+                    <img src="https://nusantarapedia.net/wp-content/uploads/IMG-20220524-WA0014.jpg" 
+                      alt="Bukit Sidoguro" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Bukit Sidoguro merupakan gardu pandang modern yang terletak di sisi Waduk Jombor, Klaten. Dilengkapi jembatan kaca, spot selfie, taman, dan panorama matahari terbenam yang indah, tempat ini menjadi favorit keluarga dan wisatawan lokal.                    
+                    </p>
+                    </div>`);
+
+    // Candi Sojiwan
+      var CandiSojiwan = L.marker([-7.761057, 110.496025], { icon: wisataIcon })
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Candi Sojiwan</h3>
+                    <img src="https://alodiatour.com/wp-content/uploads/2020/01/harga-tiket-candi-sojiwan.jpg" 
+                      alt="Candi Sojiwan" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Candi Sojiwan adalah candi bercorak Buddha yang berada di wilayah Klaten, tidak jauh dari Candi Prambanan. Bangunannya kokoh dan dikelilingi taman hijau, menjadi tempat yang cocok untuk wisata sejarah dan edukasi budaya.                    
+                    </p>
+                    </div>`);
+                    
+  var wisata = L.layerGroup([UmbulPonggok, DelesIndah, GondolaGirpasang, BukitSidoguro, CandiSojiwan]);
+
+    var kulinerIcon = L.icon({iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+                              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                              iconSize:     [25, 41],
+                              iconAnchor:   [12, 41],
+                              popupAnchor:  [1, -34],
+                              shadowSize:   [41, 41]
+                            });
+
+    // Kuliner Jalan Bhali
+    var KulinerJalanBhali = L.marker([-7.701537, 110.601199], { icon: kulinerIcon })
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Kuliner Jalan Bhali</h3>
+                <img src="https://i.ytimg.com/vi/toPHes2nj48/maxresdefault.jpg" 
+                  alt="Kuliner Jalan Bhali" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Jalan Bhali di Klaten merupakan kawasan kuliner malam yang ramai dengan aneka pedagang kaki lima, angkringan, dan jajanan khas Jawa. Suasana hangat dan penuh cita rasa lokal menjadikannya tempat favorit berburu kuliner.
+                </p>
+                </div>`);
+
+    // RM Bu Mayar
+    var RMBuMayar = L.marker([-7.684864, 110.640062], { icon: kulinerIcon })
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">RM Bu Mayar</h3>
+                <img src="https://static.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/p1/1053/2024/04/24/nasi-trancam-2946423425.jpg" 
+                  alt="RM Bu Mayar" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Rumah makan legendaris di Klaten yang menyajikan masakan rumahan khas Jawa seperti oseng, lodeh, ayam goreng kampung, dan sambal tradisional. Tempat ini selalu ramai saat jam makan siang.                
+                </p>
+                </div>`);
+    
+    // Bakso Tengkleng Mas Bambang
+    var BaksoTengklengMasBambang = L.marker([-7.705253, 110.599884], { icon: kulinerIcon })
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Bakso Tengkleng Mas Bambang</h3>
+                <img src="https://www.pinhome.id/info-area/wp-content/uploads/2022/07/18-Facebook-Bakso-Tengkleng-Mas-Bambang.jpg" 
+                  alt="Bakso Tengkleng Mas Bambang" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Tempat makan unik di Klaten yang memadukan bakso sapi dengan kuah tengkleng kambing. Rasanya kuat, gurih, dan cocok bagi pecinta daging serta kuliner khas Klaten yang ekstrem.
+                </p>
+                </div>`);
+          
+    // Sop Ayam Pak Min Klaten
+    var SopAyamPakMinKlaten = L.marker([-7.710305, 110.599702], { icon: kulinerIcon })
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Sop Ayam Pak Min Klaten</h3>
+                <img src="https://ksmtour.com/media/images/articles10/sop-ayam-pak-min-klaten.jpg" 
+                  alt="Sop Ayam Pak Min Klaten" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Sop Ayam Pak Min adalah salah satu kuliner paling ikonik dari Klaten. Kuahnya bening dan gurih, dengan suwiran ayam kampung dan pelengkap sederhana, cocok untuk semua usia dan menjadi menu harian favorit warga.                
+                </p>
+                </div>`);
+
+    // Sate Kambing “Tali Roso” Pak Tri
+    var SateKambingTaliRosoPakTri = L.marker([-7.748582184183421, 110.5799554], { icon: kulinerIcon })
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Sate Kambing “Tali Roso” Pak Tri</h3>
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuaWQ4BhkbtXUPsIva44YwoYlzs33VtM9VHeqbn4h4DbCjDnrbDk6jkweWJlc0MiWSzTDrJw4eqT8i2dnjE4pYWNKk5_maMAWvNP-h4p-ZViUrlH28C8SpDtYFveFlBzq1kiRXbhDjOXQ/" 
+                  alt="Sate Kambing “Tali Roso” Pak Tri" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Salah satu kuliner legendaris yang menjadi favorit banyak orang, terutama di Klaten dan sekitarnya. Dengan resep turun-temurun yang sudah terbukti kelezatannya, sate kambing di sini menawarkan cita rasa yang khas dan unik.
+                </p>
+                </div>`);
+
+  var kuliner = L.layerGroup([KulinerJalanBhali, RMBuMayar, BaksoTengklengMasBambang, SopAyamPakMinKlaten, SateKambingTaliRosoPakTri]);
+          
+         var overlayMaps = {"kecamatan": klaten, "wisata": wisata, "kuliner": kuliner};
+          L.control.layers(baseMaps, overlayMaps).addTo(map);
+          L.Control.geocoder().addTo(map);
+
+
+          function cari(){
+          alert('izinkan mengakses lokasi?');
+          map.locate({setView: true, maxZoom: 16});
+
+          function onLocationFound(e) {
+      	    var radius = e.accuracy / 2;
+
+      	L.marker(e.latlng).addTo(map)
+      		.bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+      	L.circle(e.latlng, radius).addTo(map);
+      }
+      map.on('locationfound', onLocationFound);
+       }
+
+            var popup = L.popup();
+            function onMapClick(e) {
+                popup
+                    .setLatLng(e.latlng)
+                    .setContent("Koordinat" + e.latlng.toString())
+                    .openOn(map);
+            }
+            map.on('click', onMapClick);
+
+          // Menambahkan GeoJSON
+          L.geoJSON(klatengeojson,{
+            style: function(feature) {
+             switch (feature.properties.WADMKC) {
+              case "Bayat": return {color: "#F0000", fillColor: "#FF0000", weight: 2, fillOpacity: 0.3,};
+              case 'Cawas': return {color: "#00FF00", fillColor: "#00FF00", weight: 2, fillOpacity: 0.3,};
+              case 'Ceper': return {color: "#0000FF", fillColor: "#0000FF", weight: 2, fillOpacity: 0.3,};
+              case 'Delanggu':  return {color: "#FFFF00", fillColor: "#FFFF00", weight: 2, fillOpacity: 0.3,};
+              case 'Gantiwarno': return {color: "#00FFFF", fillColor: "#00FFFF", weight: 2, fillOpacity: 0.3,};
+              case 'Jatinom': return {color: "#FF00FF", fillColor: "#FF00FF", weight: 2, fillOpacity: 0.3,};
+              case 'Jogonalan': return {color: "#800000", fillColor: "#800000", weight: 2, fillOpacity: 0.3,};
+              case 'Juwiring':  return {color: "#008000", fillColor: "#008000", weight: 2, fillOpacity: 0.3,};
+              case 'Kalikotes': return {color: "#000080", fillColor: "#000080", weight: 2, fillOpacity: 0.3,};
+              case 'Karanganom': return {color: "#808000", fillColor: "#808000", weight: 2, fillOpacity: 0.3,};
+              case 'Karangdowo': return {color: "#008080", fillColor: "#008080", weight: 2, fillOpacity: 0.3,};
+              case 'Karangnongko': return {color: "#800080", fillColor: "#800080", weight: 2, fillOpacity: 0.3,};
+              case 'Kebonarum':  return {color: "#C0C0C0", fillColor: "#C0C0C0", weight: 2, fillOpacity: 0.3,};
+              case 'Kemalang': return {color: "#808080", fillColor: "#808080", weight: 2, fillOpacity: 0.3,};
+              case 'Klaten Selatan': return {color: "#40E0D0", fillColor: "#40E0D0", weight: 2, fillOpacity: 0.3,};
+              case 'Klaten Tengah':  return {color: "#FFD700", fillColor: "#FFD700", weight: 2, fillOpacity: 0.3,};
+              case 'Klaten Utara': return {color: "#DAA520", fillColor: "#DAA520", weight: 2, fillOpacity: 0.3,};
+              case 'Manisrenggo': return {color: "#CD5C5C", fillColor: "#CD5C5C", weight: 2, fillOpacity: 0.3,};
+      	      case 'Ngawen': return {color: "#4682B4", fillColor: "#4682B4", weight: 2, fillOpacity: 0.3,};
+              case 'Pedan': return {color: "#6A5ACD", fillColor: "#6A5ACD", weight: 2, fillOpacity: 0.3,};
+              case 'Polanharjo': return {color: "#2E8B57", fillColor: "#2E8B57", weight: 2, fillOpacity: 0.3,};
+              case 'Prambanan': return {color: "#D2691E", fillColor: "#D2691E", weight: 2, fillOpacity: 0.3,};
+              case 'Trucuk': return {color: "#FF6347", fillColor: "#FF6347", weight: 2, fillOpacity: 0.3,};
+              case 'Tulung': return {color: "#BA55D3", fillColor: "#BA55D3", weight: 2, fillOpacity: 0.3,};
+              case 'Wedi': return {color: "#7FFF00", fillColor: "#7FFF00", weight: 2, fillOpacity: 0.3,};
+              case 'Wonosari': return {color: "#DEB887", fillColor: "#DEB887", weight: 2, fillOpacity: 0.3,};
+        	}
+          },
+          onEachFeature: function (feature, layer) {
+            layer.bindPopup(
+            'Kecamatan ' +
+            '<strong>' +
+            feature.properties.WADMKC +
+            '</strong>'
+            );
+          }
+        }).addTo(map);
+
+        L.control.scale().addTo(map);
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Copyright Section-->
+ 	<p><center> 
+		<div class="container"; style="color: #000000"> &copy; 2025 Adilla F R Thifani</div>
+	</div>
+	</center>
+    </p>
+
+  </body>
+</html>

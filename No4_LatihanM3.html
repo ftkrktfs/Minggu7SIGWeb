@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nomor 4</title>
+</head>
+<body>
+    <h1>Bilangan Prima</h1>
+    <p>Masukkan angka :</p>
+    <input type="number" id="angkaInput" />
+    <button onclick="cariBilanganPrima()">Hitung</button>
+    <p id="hasilPrima"></p>
+
+    <script>
+        function cariBilanganPrima() {
+            var angka = parseInt(document.getElementById("angkaInput").value);
+            var hasilPrima = document.getElementById("hasilPrima");
+            hasilPrima.innerHTML = "Bilangan Prima dari 1 sampai " + angka + " adalah ";
+
+            for (var i = 2; i <= angka; i++) {
+                if (isPrima(i)) {
+                    hasilPrima.innerHTML += i + " ";
+                }
+            }
+        }
+
+        function isPrima(n) {
+            if (n <= 1) {
+                return false;
+            }
+            for (var i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

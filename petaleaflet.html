@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaflet Web Map</title>
+
+    <meta charset="utf-8" />
+    <title>Rekomendasi Wisata dan Kuliner di Klaten</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" ></script>  
+    
+    <style>
+        html, body, section
+		    {
+	    	height: 100%;
+		    background-color: rgba(44, 62, 80, 0.85);
+		    }
+		    html
+		    {
+		    scroll-behavior: smooth;
+		    }
+        #map { 
+        width: 100%;
+		    height: 600px;
+		    margin-top: 100px;
+        } 
+        .title-banner {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        background: rgba(60, 70, 90, 0.85);
+        color: #f1f1f1;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 30px;
+        }
+        .leaflet-popup-content {
+            text-align: justify;
+        }
+        .leaflet-popup-content img {
+            width: 70%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div class="title-banner">Rekomendasi Wisata dan Kuliner di Klaten</div>
+    <center><div id="map"></div></center>
+    <script>
+        var map = L.map('map',{ 
+        center: [-7.6741, 110.6289], 
+        zoom: 12 
+        }); 
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { 
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' 
+        }).addTo(map); 
+
+      // Umbul Ponggok
+      var marker = L.marker([-7.613798, 110.635864]) 
+                    .addTo(map)
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Umbul Ponggok</h3>
+                    <img src="https://liburanyuk.co.id/wp-content/uploads/2021/01/131249701_398511794726504_9107937725424463849_n.jpg" 
+                      alt="Umbul Ponggok" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Kolam mata air alami di Desa Ponggok, Klaten, yang terkenal dengan pengalaman snorkeling dan foto bawah air menggunakan berbagai properti unik seperti sepeda, kursi, hingga motor. Airnya jernih dan penuh ikan hias, menjadikannya destinasi wisata favorit keluarga dan wisatawan muda. 
+                    </p>
+                    </div>`);
+        
+      // Deles Indah
+      var marker = L.marker([-7.569789, 110.466909]) 
+                    .addTo(map)
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Deles Indah</h3>
+                    <img src="https://asset-2.tstatic.net/jogja/foto/bank/images/Wisata-Deles-Indah.jpg" 
+                      alt="Deles Indah" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Salah satu destinasi wisata alam di Kabupaten Klaten, Jawa Tengah, yang menawarkan pemandangan indah di lereng Gunung Merapi. Lokasinya berada di Kecamatan Kemalang, sekitar 25 km dari pusat Kota Klaten. Obyek wisata ini menjadi tempat favorit bagi wisatawan yang mencari ketenangan dan udara segar di ketinggian.                    
+                    </p>
+                    </div>`);
+
+      // Gondola Girpasang
+      var marker = L.marker([-7.570385, 110.479008]) 
+                    .addTo(map)
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Gondola Girpasang</h3>
+                    <img src="https://i.ytimg.com/vi/TW_ylGod65w/maxresdefault.jpg" 
+                      alt="Gondola Girpasang" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Terletak di lereng Gunung Merapi, Gondola Girpasang menawarkan pengalaman unik menyeberangi jurang sedalam 150 meter dengan menggunakan gondola tradisional yang menghubungkan Dusun Girpasang dengan desa sekitarnya. Dikelilingi pemandangan alam yang spektakuler dan udara sejuk pegunungan, wisata ini cocok untuk pencinta petualangan dan fotografi alam. Tersedia juga jembatan gantung sepanjang 120 meter, kafe, dan area santai.                   
+                    </p>
+                    </div>`);
+
+      // Bukit Sidoguro
+      var marker = L.marker([-7.750700, 110.621002]) 
+                    .addTo(map)
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Bukit Sidoguro</h3>
+                    <img src="https://nusantarapedia.net/wp-content/uploads/IMG-20220524-WA0014.jpg" 
+                      alt="Bukit Sidoguro" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Bukit Sidoguro merupakan gardu pandang modern yang terletak di sisi Waduk Jombor, Klaten. Dilengkapi jembatan kaca, spot selfie, taman, dan panorama matahari terbenam yang indah, tempat ini menjadi favorit keluarga dan wisatawan lokal.                    
+                    </p>
+                    </div>`);
+
+    // Candi Sojiwan
+      var marker = L.marker([-7.761057, 110.496025]) 
+                    .addTo(map)
+                    .bindPopup(` 
+                    <div style="max-width:250px; font-family:sans-serif;">
+                    <h3 style="margin-bottom:5px; color:#0D47A1;">Candi Sojiwan</h3>
+                    <img src="https://alodiatour.com/wp-content/uploads/2020/01/harga-tiket-candi-sojiwan.jpg" 
+                      alt="Candi Sojiwan" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                    <p style="margin:0;"> 
+                      Candi Sojiwan adalah candi bercorak Buddha yang berada di wilayah Klaten, tidak jauh dari Candi Prambanan. Bangunannya kokoh dan dikelilingi taman hijau, menjadi tempat yang cocok untuk wisata sejarah dan edukasi budaya.                    
+                    </p>
+                    </div>`);
+
+    var kulinerIcon = L.icon({iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+                              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                              iconSize:     [25, 41],
+                              iconAnchor:   [12, 41],
+                              popupAnchor:  [1, -34],
+                              shadowSize:   [41, 41]
+                            });
+
+    // Kuliner Jalan Bhali
+    var marker = L.marker([-7.701537, 110.601199], { icon: kulinerIcon })
+              .addTo(map)
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Kuliner Jalan Bhali</h3>
+                <img src="https://i.ytimg.com/vi/toPHes2nj48/maxresdefault.jpg" 
+                  alt="Kuliner Jalan Bhali" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Jalan Bhali di Klaten merupakan kawasan kuliner malam yang ramai dengan aneka pedagang kaki lima, angkringan, dan jajanan khas Jawa. Suasana hangat dan penuh cita rasa lokal menjadikannya tempat favorit berburu kuliner.
+                </p>
+                </div>`);
+
+    // RM Bu Mayar
+    var marker = L.marker([-7.684864, 110.640062], { icon: kulinerIcon })
+              .addTo(map)
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">RM Bu Mayar</h3>
+                <img src="https://static.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/p1/1053/2024/04/24/nasi-trancam-2946423425.jpg" 
+                  alt="RM Bu Mayar" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Rumah makan legendaris di Klaten yang menyajikan masakan rumahan khas Jawa seperti oseng, lodeh, ayam goreng kampung, dan sambal tradisional. Tempat ini selalu ramai saat jam makan siang.                
+                </p>
+                </div>`);
+    
+    // Bakso Tengkleng Mas Bambang
+    var marker = L.marker([-7.705253, 110.599884], { icon: kulinerIcon })
+              .addTo(map)
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Bakso Tengkleng Mas Bambang</h3>
+                <img src="https://www.pinhome.id/info-area/wp-content/uploads/2022/07/18-Facebook-Bakso-Tengkleng-Mas-Bambang.jpg" 
+                  alt="Bakso Tengkleng Mas Bambang" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Tempat makan unik di Klaten yang memadukan bakso sapi dengan kuah tengkleng kambing. Rasanya kuat, gurih, dan cocok bagi pecinta daging serta kuliner khas Klaten yang ekstrem.
+                </p>
+                </div>`);
+          
+    // Sop Ayam Pak Min Klaten
+    var marker = L.marker([-7.710305, 110.599702], { icon: kulinerIcon })
+              .addTo(map)
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Sop Ayam Pak Min Klaten</h3>
+                <img src="https://ksmtour.com/media/images/articles10/sop-ayam-pak-min-klaten.jpg" 
+                  alt="Sop Ayam Pak Min Klaten" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Sop Ayam Pak Min adalah salah satu kuliner paling ikonik dari Klaten. Kuahnya bening dan gurih, dengan suwiran ayam kampung dan pelengkap sederhana, cocok untuk semua usia dan menjadi menu harian favorit warga.                
+                </p>
+                </div>`);
+
+    // Sate Kambing “Tali Roso” Pak Tri
+    var marker = L.marker([-7.748582184183421, 110.5799554], { icon: kulinerIcon })
+              .addTo(map)
+              .bindPopup(`
+                <div style="max-width:250px; font-family:sans-serif;">
+                <h3 style="margin-bottom:5px; color:#D2691E;">Sate Kambing “Tali Roso” Pak Tri</h3>
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuaWQ4BhkbtXUPsIva44YwoYlzs33VtM9VHeqbn4h4DbCjDnrbDk6jkweWJlc0MiWSzTDrJw4eqT8i2dnjE4pYWNKk5_maMAWvNP-h4p-ZViUrlH28C8SpDtYFveFlBzq1kiRXbhDjOXQ/" 
+                  alt="Sate Kambing “Tali Roso” Pak Tri" style="width:100%; border-radius:8px; margin-bottom:8px;">
+                <p style="margin:0;"> 
+                  Salah satu kuliner legendaris yang menjadi favorit banyak orang, terutama di Klaten dan sekitarnya. Dengan resep turun-temurun yang sudah terbukti kelezatannya, sate kambing di sini menawarkan cita rasa yang khas dan unik.
+                </p>
+                </div>`);
+
+    </script>
+
+ 	<!-- Copyright Section-->
+ 	<p><center> 
+		<div class="container"; style="color: #f1f1f1"> &copy; 2025 Adilla F R Thifani</div>
+	</div>
+	</center>
+    </p>
+
+  </body>
+</html>
